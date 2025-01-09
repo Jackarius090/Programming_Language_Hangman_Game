@@ -6,20 +6,29 @@ function App() {
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [guessWord, setGuessWord] = useState("jack");
 
-  const LanguageTiles = languages.map((language, i) => {
+  const wrongGuessCount = guessedLetters.filter(
+    (letter) => !guessWord.toUpperCase().split("").includes(letter)
+  ).length;
+
+  const isGameOver = wrongGuessCount >= languages.length - 1;
+  const isGameWon = guessWord
+    .toUpperCase()
+    .split("")
+    .every((letter) => guessedLetters.includes(letter));
+  const LanguageTiles = languages.map((lang, i) => {
+    const isLost = i < wrongGuessCount;
+    const className = clsx({
+      chip: true,
+      lost: isLost,
+    });
+    const styles = {
+      backgroundColor: lang.backgroundColor,
+      color: lang.color,
+    };
     return (
-      <div
-        key={i}
-        style={{
-          backgroundColor: language.backgroundColor,
-          color: language.color,
-          padding: "5px",
-          borderRadius: "4px",
-          margin: "5px",
-        }}
-      >
-        {language.name}
-      </div>
+      <span className={className} style={styles} key={lang.name}>
+        {lang.name}
+      </span>
     );
   });
 
@@ -72,6 +81,11 @@ function App() {
     });
   };
 
+  const makeNewGame = () => {
+    setGuessWord("newword");
+    setGuessedLetters([]);
+  };
+
   return (
     <main>
       <header>
@@ -82,13 +96,30 @@ function App() {
         </p>
       </header>
       <section className="game-status">
-        <h2>You win!</h2>
-        <p>Well done!</p>
+        {isGameWon ? (
+          <>
+            <h2>You win!</h2>
+            <p>Well done!</p>
+          </>
+        ) : isGameOver ? (
+          <>
+            <h2>You lose!</h2>
+            <p>You lose! Better start learning Assembly 😭</p>
+          </>
+        ) : (
+          ""
+        )}
       </section>
-      <section className="languages-box">{LanguageTiles}</section>
+      <section>
+        <span className="languages-box">{LanguageTiles}</span>
+      </section>
       <section className="display-word-container">{displayWord}</section>
       <section className="keyboard">{keyboard}</section>
-      <button className="new-game">New Game</button>
+      {isGameOver && (
+        <button onClick={makeNewGame} className="new-game">
+          New Game
+        </button>
+      )}
     </main>
   );
 }
