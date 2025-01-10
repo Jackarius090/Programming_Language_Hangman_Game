@@ -1,6 +1,6 @@
 {
   "name": "programming-language-hangman",
-  "homepage": "https://jackarius090.github.io/Programming_Language_Hangman_Game",
+  "homepage": "https://jackarius090.github.io/Programming_Language_Hangman_Game/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,6 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prebuild": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
